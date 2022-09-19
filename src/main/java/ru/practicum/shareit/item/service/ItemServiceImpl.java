@@ -21,11 +21,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
     @Autowired
-    ItemRepository itemRepository;
-
+    private ItemRepository itemRepository;
     @Autowired
-    UserService userService;
-
+    private UserService userService;
 
     @Override
     public ItemDto getItemById(Integer id) {

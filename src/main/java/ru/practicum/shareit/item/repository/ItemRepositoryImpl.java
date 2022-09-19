@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 @Repository
 public class ItemRepositoryImpl implements ItemRepository {
 
-    Map<Integer, Item> itemsMap = new HashMap<>();
-    Integer id = 0;
+    private final Map<Integer, Item> itemsMap = new HashMap<>();
+    private Integer id = 0;
 
     @Override
     public Optional<Item> getItemById(Integer id) {

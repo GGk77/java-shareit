@@ -8,9 +8,9 @@ import java.util.*;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
-    Map<Integer, User> usersMap = new HashMap<>();
-    Set<String> emails = new HashSet<>();
-    Integer id = 0;
+    private final Map<Integer, User> usersMap = new HashMap<>();
+    private  final Set<String> emails = new HashSet<>();
+    private Integer id = 0;
 
     @Override
     public Optional<User> getUserById(Integer id) {

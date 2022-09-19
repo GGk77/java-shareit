@@ -13,11 +13,11 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
-    Integer id;
+    private Integer id;
     @NotNull(groups = {Create.class})
-    String name;
+    private String name;
     @Email(groups = {Create.class, Update.class})
     @NotNull(groups = {Create.class})
-    String email;
+    private String email;
 
 }
