@@ -78,7 +78,7 @@ public class ItemServiceImpl implements ItemService {
         if (item.getAvailable() != null) {
             updatedItem.setAvailable(item.getAvailable());
         }
-        if (userService.getUserById(userId) != null && !updatedItem.getOwner().getId().equals(userId)){
+        if (userService.getUserById(userId) != null && !updatedItem.getOwner().getId().equals(userId)) {
             throw new NotFoundException("item not found");
         }
         return ItemMapper.toItemDto(itemRepository.update(updatedItem, itemId));

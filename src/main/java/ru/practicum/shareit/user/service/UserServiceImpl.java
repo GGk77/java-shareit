@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
     public User update(UserDto userDto, Integer id) {
         UserDto updatedUser = getUserById(id);
         String updatedEmail = userDto.getEmail();
-        if (userRepository.allEmails().contains(updatedEmail) ) {
+        if (userRepository.allEmails().contains(updatedEmail)) {
             throw new ExistException("User with this id- {} and with email- {} is not found and cannot be updated");
         }
         if (updatedEmail != null && !updatedEmail.isBlank()) {

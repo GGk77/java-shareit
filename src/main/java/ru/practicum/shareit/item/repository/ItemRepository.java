@@ -11,9 +11,9 @@ public interface ItemRepository {
 
     Set<Item> getAllItems();
 
-    Item create(Item Item);
+    Item create(Item item);
 
-    Item update(Item Item, Integer id);
+    Item update(Item item, Integer id);
 
     Set<Item> searchItemByQuery(String query);
 
