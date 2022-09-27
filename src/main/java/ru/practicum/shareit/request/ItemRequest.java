@@ -1,7 +1,13 @@
 package ru.practicum.shareit.request;
 
-/**
- * TODO Sprint add-item-requests.
- */
+import ru.practicum.shareit.user.model.User;
+
+import java.time.LocalDateTime;
+
 public class ItemRequest {
+    Integer id;
+    String description;
+    User requester;
+    LocalDateTime created;
+
 }
