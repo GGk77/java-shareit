@@ -9,6 +9,7 @@ import ru.practicum.shareit.user.model.User;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+
 @Builder
 @Getter
 @Setter

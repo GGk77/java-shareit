@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.comment.dto.CommentDto;
 import ru.practicum.shareit.exceptions.ExistException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.ValidationException;
@@ -42,7 +41,7 @@ public class UserServiceImpl implements UserService {
             try {
                 User createdUser = userRepository.save(UserMapper.toUser(userDto));
                 return UserMapper.toUserDto(createdUser);
-            } catch (ExistException e ) {
+            } catch (ExistException e) {
                 throw new ExistException("User with email exists");
             }
         } else {
