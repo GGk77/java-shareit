@@ -1,32 +1,51 @@
 package ru.practicum.shareit.item.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.validation.Create;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
-@Data
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+@Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "items")
 public class Item {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
 
-    @NotNull(groups = {Create.class})
-    @NotBlank(groups = {Create.class})
+    @Column(name = "name")
     private String name;
 
-    @NotNull(groups = {Create.class})
-    @NotBlank(groups = {Create.class})
+    @Column(name = "description")
     private String description;
 
-    @NotBlank(groups = {Create.class})
-    @NotNull(groups = {Create.class})
+    @Column(name = "is_available")
     private Boolean available;
 
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
-//    ItemRequest request;
+
+    @OneToOne
+    @JoinColumn(name = "request_id")
+    private ItemRequest request;
+
+    @OneToMany(mappedBy = "item",
+            orphanRemoval = true,
+            cascade = CascadeType.REMOVE,
+            fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Booking> bookings = new HashSet<>();
+
 }
+

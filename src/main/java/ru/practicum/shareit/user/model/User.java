@@ -1,25 +1,27 @@
 package ru.practicum.shareit.user.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import ru.practicum.shareit.validation.Create;
-import ru.practicum.shareit.validation.Update;
+import lombok.*;
 
+import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name = "users")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
 
-    @NotNull(groups = {Create.class})
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Email(groups = {Create.class, Update.class})
-    @NotNull(groups = {Create.class})
+    @Email
+    @Column(name = "email",unique = true, nullable = false)
     private String email;
 
 }
