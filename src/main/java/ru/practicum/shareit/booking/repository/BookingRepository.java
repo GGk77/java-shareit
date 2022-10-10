@@ -11,17 +11,17 @@ import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
-    List<Booking> getAllByItem_Owner_IdOrderByStartDesc(Integer userId);
+    List<Booking> getAllByItemOwnerIdOrderByStartDesc(Integer userId);
 
-    List<Booking> getAllByBooker_IdOrderByStartDesc(Integer userId);
+    List<Booking> getAllByBookerIdOrderByStartDesc(Integer userId);
 
-    Booking getFirstByItem_IdAndEndBeforeOrderByEndDesc(Integer itemId, LocalDateTime end);
+    Booking getFirstByItemIdAndEndBeforeOrderByEndDesc(Integer itemId, LocalDateTime end);
 
-    Booking getTopByItem_IdAndStartAfterOrderByStartAsc(Integer itemId, LocalDateTime start);
+    Booking getTopByItemIdAndStartAfterOrderByStartAsc(Integer itemId, LocalDateTime start);
 
-    List<Booking> getByBooker_IdAndStatus(Integer bookerId, Status status);
+    List<Booking> getByBookerIdAndStatus(Integer bookerId, Status status);
 
-    List<Booking> getAllByItem_Owner_IdAndStatus(Integer ownerId, Status status);
+    List<Booking> getAllByItemOwnerIdAndStatus(Integer ownerId, Status status);
 
     @Query("SELECT b FROM Booking b " +
             "WHERE b.booker.id = :id AND b.end < :currentTime AND upper(b.status) = UPPER('APPROVED')" +

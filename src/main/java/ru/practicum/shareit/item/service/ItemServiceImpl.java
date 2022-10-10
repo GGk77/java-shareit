@@ -50,8 +50,8 @@ public class ItemServiceImpl implements ItemService {
         Integer ownerId = item.getOwner().getId();
         if (ownerId.equals(userId)) {
             LocalDateTime localDateTime = LocalDateTime.now();
-            Booking lastBooking = bookingRepository.getFirstByItem_IdAndEndBeforeOrderByEndDesc(itemId, localDateTime);
-            Booking nextBooking = bookingRepository.getTopByItem_IdAndStartAfterOrderByStartAsc(itemId, localDateTime);
+            Booking lastBooking = bookingRepository.getFirstByItemIdAndEndBeforeOrderByEndDesc(itemId, localDateTime);
+            Booking nextBooking = bookingRepository.getTopByItemIdAndStartAfterOrderByStartAsc(itemId, localDateTime);
             return ItemMapperWithBooking.toItemDtoWithBooking(commentList, lastBooking, nextBooking, item);
         } else return ItemMapperWithBooking.toItemDtoWithBooking(commentList, null, null, item);
     }
@@ -63,9 +63,9 @@ public class ItemServiceImpl implements ItemService {
                 .map(item -> {
                             List<Comment> comments = getCommentsByItemId(item);
                             Booking lastBooking = bookingRepository
-                                    .getFirstByItem_IdAndEndBeforeOrderByEndDesc(item.getId(), LocalDateTime.now());
+                                    .getFirstByItemIdAndEndBeforeOrderByEndDesc(item.getId(), LocalDateTime.now());
                             Booking nextBooking = bookingRepository
-                                    .getTopByItem_IdAndStartAfterOrderByStartAsc(item.getId(), LocalDateTime.now());
+                                    .getTopByItemIdAndStartAfterOrderByStartAsc(item.getId(), LocalDateTime.now());
                             return ItemMapperWithBooking.toItemDtoWithBooking(comments, lastBooking, nextBooking, item);
                         }
                 )

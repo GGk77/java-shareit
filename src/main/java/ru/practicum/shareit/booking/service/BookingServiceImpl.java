@@ -97,7 +97,7 @@ public class BookingServiceImpl implements BookingService {
     public List<BookingDto> getAllBookingByOwnerId(Integer ownerId, String stringState) {
         userRepository.findById(ownerId)
                 .orElseThrow(() -> new NotFoundException(String.format("owner with id %d is not found", ownerId)));
-        List<Booking> bookings = bookingRepository.getAllByItem_Owner_IdOrderByStartDesc(ownerId);
+        List<Booking> bookings = bookingRepository.getAllByItemOwnerIdOrderByStartDesc(ownerId);
         if (bookings.isEmpty()) {
             throw new NotFoundException("he has no reservations");
         }
@@ -114,13 +114,13 @@ public class BookingServiceImpl implements BookingService {
                 bookings = bookingRepository.getOwnerCurrent(ownerId, localDateTime);
                 break;
             case WAITING:
-                bookings = bookingRepository.getAllByItem_Owner_IdAndStatus(ownerId, Status.WAITING);
+                bookings = bookingRepository.getAllByItemOwnerIdAndStatus(ownerId, Status.WAITING);
                 break;
             case PAST:
                 bookings = bookingRepository.getOwnerPast(ownerId, localDateTime);
                 break;
             case REJECTED:
-                bookings = bookingRepository.getAllByItem_Owner_IdAndStatus(ownerId, Status.REJECTED);
+                bookings = bookingRepository.getAllByItemOwnerIdAndStatus(ownerId, Status.REJECTED);
                 break;
         }
         return bookings
@@ -133,7 +133,7 @@ public class BookingServiceImpl implements BookingService {
     public List<BookingDto> getAllBookingByUserId(Integer userId, String stringState) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(String.format("user with id %d is not found", userId)));
-        List<Booking> bookings = bookingRepository.getAllByBooker_IdOrderByStartDesc(userId);
+        List<Booking> bookings = bookingRepository.getAllByBookerIdOrderByStartDesc(userId);
         if (bookings.isEmpty()) {
             throw new NotFoundException("he has no reservations");
         }
@@ -147,13 +147,13 @@ public class BookingServiceImpl implements BookingService {
                 bookings = bookingRepository.getByBookerIdStatePast(userId, localDateTime);
                 break;
             case WAITING:
-                bookings = bookingRepository.getByBooker_IdAndStatus(userId, Status.WAITING);
+                bookings = bookingRepository.getByBookerIdAndStatus(userId, Status.WAITING);
                 break;
             case CURRENT:
                 bookings = bookingRepository.getByBookerIdStateCurrent(userId, localDateTime);
                 break;
             case REJECTED:
-                bookings = bookingRepository.getByBooker_IdAndStatus(userId, Status.REJECTED);
+                bookings = bookingRepository.getByBookerIdAndStatus(userId, Status.REJECTED);
                 break;
             case FUTURE:
                 bookings = bookingRepository.getFuture(userId, localDateTime);
@@ -183,6 +183,6 @@ public class BookingServiceImpl implements BookingService {
     private List<Booking> getAllUser(int userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(String.format("user with id %d is not found", userId)));
-        return bookingRepository.getAllByBooker_IdOrderByStartDesc(userId);
+        return bookingRepository.getAllByBookerIdOrderByStartDesc(userId);
     }
 }
