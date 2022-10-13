@@ -1,10 +1,11 @@
 package ru.practicum.shareit.item.mapper;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.model.User;
 
-@Service
+@Component
 public class ItemMapper {
 
     public static ItemDto toItemDto(Item item) {
@@ -12,18 +13,17 @@ public class ItemMapper {
                 item.getId(),
                 item.getName(),
                 item.getDescription(),
-                item.getAvailable(),
-                item.getOwner()
+                item.getAvailable()
         );
     }
 
-    public static Item toItem(ItemDto dto) {
-        return new Item(
-                dto.getId(),
-                dto.getName(),
-                dto.getDescription(),
-                dto.getAvailable(),
-                dto.getOwner()
-        );
+    public static Item toItem(ItemDto itemDto, User user) {
+        return Item.builder()
+                .id(itemDto.getId())
+                .name(itemDto.getName())
+                .description(itemDto.getDescription())
+                .available(itemDto.getAvailable())
+                .owner(user)
+                .build();
     }
 }
