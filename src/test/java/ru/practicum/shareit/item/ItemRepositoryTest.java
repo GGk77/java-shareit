@@ -46,10 +46,10 @@ class ItemRepositoryTest {
 
     @Test
     void getByOwnerTest() {
-        final List<Item> byOwner = (List<Item>) itemRepository.findByOwnerIdOrderByIdAsc(user1.getId());
-        assertNotNull(byOwner);
-        assertEquals(1, byOwner.size());
-        assertEquals("item1", byOwner.get(0).getName());
+        final List<Item> owner = (List<Item>) itemRepository.findByOwnerIdOrderByIdAsc(user1.getId());
+        assertNotNull(owner);
+        assertEquals(1, owner.get(0).getId());
+        assertEquals("item1", owner.get(0).getName());
     }
 
     @Test
