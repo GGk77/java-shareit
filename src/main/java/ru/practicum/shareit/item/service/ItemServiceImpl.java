@@ -124,7 +124,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> searchItemByQuery(String query) {
-        if (query.isEmpty()) {
+        if (query.isEmpty() || query.equals(" ")) {
             return new ArrayList<>();
         }
         return itemRepository.searchByQuery(query)

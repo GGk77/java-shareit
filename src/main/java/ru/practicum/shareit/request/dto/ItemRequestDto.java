@@ -16,14 +16,14 @@ public class ItemRequestDto {
     private Integer id;
     private String description;
     private LocalDateTime created;
-    private List<Item> items;
+    private List<ItemDto> items;
 
     @Getter
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class Item {
+    public static class ItemDto {
         private Integer id;
         private String name;
         private String description;

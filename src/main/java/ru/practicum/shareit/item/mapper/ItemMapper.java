@@ -31,9 +31,7 @@ public class ItemMapper {
 
 
     public static ItemDto toItemDto(Item item) {
-        Integer requestId = null;
-        if (item.getRequest() != null)
-            requestId = item.getRequest().getId();
+        Integer requestId = (item.getRequest() != null) ? item.getRequest().getId() : null;
         return ItemDto.builder()
                 .id(item.getId())
                 .name(item.getName())
@@ -45,9 +43,9 @@ public class ItemMapper {
 
     public static ItemDtoWithBooking toItemDtoWithBooking(List<Comment> commentList, Booking lastBooking,
                                                           Booking nextBooking, Item item) {
-        List<ItemDtoWithBooking.Comment> comments = commentList.stream()
+        List<ItemDtoWithBooking.CommentDto> comments = commentList.stream()
                 .map(comment -> {
-                    ItemDtoWithBooking.Comment comment1 = new ItemDtoWithBooking.Comment();
+                    ItemDtoWithBooking.CommentDto comment1 = new ItemDtoWithBooking.CommentDto();
                     comment1.setId(comment.getId());
                     comment1.setText(comment.getText());
                     comment1.setAuthorName(comment.getUser().getName());
@@ -55,7 +53,7 @@ public class ItemMapper {
                     return comment1;
                 }).collect(Collectors.toList());
 
-        ItemDtoWithBooking.Booking lstBooking = new ItemDtoWithBooking.Booking();
+        ItemDtoWithBooking.BookingDto lstBooking = new ItemDtoWithBooking.BookingDto();
         if (lastBooking != null) {
             lstBooking.setId(lastBooking.getId());
             lstBooking.setBookerId(lastBooking.getBooker().getId());
@@ -63,7 +61,7 @@ public class ItemMapper {
             lstBooking = null;
         }
 
-        ItemDtoWithBooking.Booking nxtBooking = new ItemDtoWithBooking.Booking();
+        ItemDtoWithBooking.BookingDto nxtBooking = new ItemDtoWithBooking.BookingDto();
         if (nextBooking != null) {
             nxtBooking.setId(nextBooking.getId());
             nxtBooking.setBookerId(nextBooking.getBooker().getId());

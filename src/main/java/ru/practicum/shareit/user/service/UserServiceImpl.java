@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
             try {
                 User createdUser = userRepository.save(UserMapper.toUser(userDto));
                 return UserMapper.toUserDto(createdUser);
-            } catch (ExistException e) {
+            } catch (RuntimeException e) {
                 throw new ExistException("User with email exists");
             }
         } else {

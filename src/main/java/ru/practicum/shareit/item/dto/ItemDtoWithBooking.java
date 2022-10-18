@@ -16,16 +16,16 @@ public class ItemDtoWithBooking {
     private String name;
     private String description;
     private Boolean available;
-    private Booking lastBooking;
-    private Booking nextBooking;
-    private List<Comment> comments;
+    private BookingDto lastBooking;
+    private BookingDto nextBooking;
+    private List<CommentDto> comments;
 
     @Getter
     @Setter
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class Booking {
+    public static class BookingDto {
         private Integer id;
         private Integer bookerId;
     }
@@ -35,7 +35,7 @@ public class ItemDtoWithBooking {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class Comment {
+    public static class CommentDto {
         private Integer id;
         private String text;
         private String authorName;
