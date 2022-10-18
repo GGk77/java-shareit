@@ -5,6 +5,8 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.practicum.shareit.exceptions.ExistException;
+import ru.practicum.shareit.exceptions.NotFoundException;
+import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
@@ -76,5 +78,18 @@ public class UserServiceTest {
         userService.create(UserMapper.toUserDto(user2));
         final ExistException exception = assertThrows(ExistException.class, () -> userService.create(UserMapper.toUserDto(user3)));
         assertEquals("User with email exists", exception.getMessage());
+    }
+
+    @Test
+    void createUserWithNullEmailTest() {
+        User user4 = new User(4, "user4", null);
+        final ValidationException exception = assertThrows(ValidationException.class, () -> userService.create(UserMapper.toUserDto(user4)));
+        assertEquals("Email not found", exception.getMessage());
+    }
+
+    @Test
+    void getUserNotByIdTest() {
+        final NotFoundException exception = assertThrows(NotFoundException.class, () -> userService.getUserById(123123));
+        assertEquals("User with this id 123123 not found", exception.getMessage());
     }
 }
