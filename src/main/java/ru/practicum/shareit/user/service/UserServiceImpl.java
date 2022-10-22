@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class UserServiceImpl implements UserService {
+
     @Autowired
     private UserRepository userRepository;
 
@@ -35,13 +35,13 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
-    @Override
+    @Transactional
     public UserDto create(UserDto userDto) {
         if (userDto.getEmail() != null && userDto.getEmail().contains("@")) {
             try {
                 User createdUser = userRepository.save(UserMapper.toUser(userDto));
                 return UserMapper.toUserDto(createdUser);
-            } catch (ExistException e) {
+            } catch (RuntimeException e) {
                 throw new ExistException("User with email exists");
             }
         } else {
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
+    @Transactional
     public UserDto update(UserDto userDto, Integer id) {
         User updatedUser = UserMapper.toUser(getUserById(id));
         String updatedEmail = userDto.getEmail();
@@ -67,11 +67,9 @@ public class UserServiceImpl implements UserService {
         return UserMapper.toUserDto(updatedUser);
     }
 
-    @Override
+    @Transactional
     public void delete(Integer id) {
         userRepository.deleteById(id);
     }
-
-
 
 }

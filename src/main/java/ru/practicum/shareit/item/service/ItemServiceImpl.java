@@ -15,9 +15,10 @@ import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoWithBooking;
 import ru.practicum.shareit.item.mapper.ItemMapper;
-import ru.practicum.shareit.item.mapper.ItemMapperWithBooking;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.request.repository.ItemRequestRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -28,7 +29,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class ItemServiceImpl implements ItemService {
 
     @Autowired
@@ -42,6 +42,9 @@ public class ItemServiceImpl implements ItemService {
     @Autowired
     private CommentRepository commentRepository;
 
+    @Autowired
+    private ItemRequestRepository itemRequestRepository;
+
     @Override
     public ItemDtoWithBooking getItemById(Integer userId, Integer itemId) {
         Item item = itemRepository.findById(itemId)
@@ -52,8 +55,8 @@ public class ItemServiceImpl implements ItemService {
             LocalDateTime localDateTime = LocalDateTime.now();
             Booking lastBooking = bookingRepository.getFirstByItemIdAndEndBeforeOrderByEndDesc(itemId, localDateTime);
             Booking nextBooking = bookingRepository.getTopByItemIdAndStartAfterOrderByStartAsc(itemId, localDateTime);
-            return ItemMapperWithBooking.toItemDtoWithBooking(commentList, lastBooking, nextBooking, item);
-        } else return ItemMapperWithBooking.toItemDtoWithBooking(commentList, null, null, item);
+            return ItemMapper.toItemDtoWithBooking(commentList, lastBooking, nextBooking, item);
+        } else return ItemMapper.toItemDtoWithBooking(commentList, null, null, item);
     }
 
     @Override
@@ -66,13 +69,13 @@ public class ItemServiceImpl implements ItemService {
                                     .getFirstByItemIdAndEndBeforeOrderByEndDesc(item.getId(), LocalDateTime.now());
                             Booking nextBooking = bookingRepository
                                     .getTopByItemIdAndStartAfterOrderByStartAsc(item.getId(), LocalDateTime.now());
-                            return ItemMapperWithBooking.toItemDtoWithBooking(comments, lastBooking, nextBooking, item);
+                            return ItemMapper.toItemDtoWithBooking(comments, lastBooking, nextBooking, item);
                         }
                 )
                 .collect(Collectors.toList());
     }
 
-    @Override
+    @Transactional
     public ItemDto create(Integer userId, ItemDto itemDto) {
         if (itemDto.getDescription() == null || itemDto.getName().isBlank()) {
             throw new ValidationException("name is empty");
@@ -87,10 +90,15 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> new NotFoundException(String.format("User with id %d is not found", userId)));
         Item item = ItemMapper.toItem(itemDto, owner);
         item.setOwner(owner);
+        if (item.getRequest() != null) {
+            ItemRequest itemRequest = itemRequestRepository.findById(item.getRequest().getId())
+                    .orElseThrow(() -> new NotFoundException("Request with id %d is not found"));
+            item.setRequest(itemRequest);
+        }
         return ItemMapper.toItemDto(itemRepository.save(item));
     }
 
-    @Override
+    @Transactional
     public ItemDto update(Integer userId, ItemDto itemDto, Integer itemId) {
         User owner = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(String.format("User with id %d is not found", userId)));
@@ -116,7 +124,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> searchItemByQuery(String query) {
-        if (query.isEmpty()) {
+        if (query.isEmpty() || query.equals(" ")) {
             return new ArrayList<>();
         }
         return itemRepository.searchByQuery(query)
@@ -125,7 +133,7 @@ public class ItemServiceImpl implements ItemService {
                 .collect(Collectors.toList());
     }
 
-    @Override
+    @Transactional
     public CommentDto addComment(Integer userId, Integer itemId, CommentDto commentDto) {
         if (commentDto.getText().isEmpty() || commentDto.getText().isBlank()) {
             throw new ValidationException("This comment is empty or blank");
@@ -145,7 +153,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     public List<Comment> getCommentsByItemId(Item item) {
-        return commentRepository.getByItem_IdOrderByCreatedDesc(item.getId());
+        return commentRepository.getByItemIdOrderByCreatedDesc(item.getId());
     }
 
 }

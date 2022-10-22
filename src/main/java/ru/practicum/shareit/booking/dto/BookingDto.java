@@ -14,16 +14,16 @@ public class BookingDto {
     private Integer id;
     private LocalDateTime start;
     private LocalDateTime end;
-    private Item item;
+    private ItemDto item;
     private Integer itemId;
-    private User booker;
+    private UserDto booker;
     private Status status;
 
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class Item {
+    public static class ItemDto {
         private Integer id;
         private String name;
     }
@@ -32,7 +32,7 @@ public class BookingDto {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class User {
+    public static class UserDto {
         private Integer id;
     }
 }
