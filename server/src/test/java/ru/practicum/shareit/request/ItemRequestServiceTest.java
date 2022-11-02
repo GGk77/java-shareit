@@ -3,6 +3,7 @@ package ru.practicum.shareit.request;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.mapper.ItemRequestMapper;
 import ru.practicum.shareit.request.model.ItemRequest;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Transactional
@@ -56,6 +58,11 @@ class ItemRequestServiceTest {
     void getRequestByIdTest() {
         assertEquals(itemRequestService.getItemRequestById(itemRequest.getId(),
                 user.getId()).getId(), ItemRequestMapper.toItemRequestDto(itemRequest, new ArrayList<>()).getId());
+    }
+
+    @Test
+    void getRequestWithNegativeSizeTest() {
+        assertThrows(ValidationException.class, () -> itemRequestService.getAllRequestsForUser(2, -10, -10));
     }
 
     @Test
